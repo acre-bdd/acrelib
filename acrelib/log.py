@@ -5,11 +5,16 @@ from termcolor import colored
 
 log = logging.getLogger()
 
+logging.addLevelName(23, "HIGHLIGHT")
+logging.addLevelName(25, "TRACE")
+logging.HIGHLIGHT = 23
+logging.TRACE = 25
+
 log.NOTSET = logging.NOTSET
 log.DEBUG = logging.DEBUG
 log.INFO = logging.INFO
-log.HIGHLIGHT = logging.INFO + 3
-log.TRACE = logging.INFO + 5
+log.HIGHLIGHT = logging.HIGHLIGHT
+log.TRACE = logging.TRACE
 log.WARNING = logging.WARNING
 log.ERROR = logging.ERROR
 log.CRITICAL = logging.CRITICAL
@@ -54,7 +59,8 @@ log.highlight = highlight
 
 os.environ['FORCE_COLOR'] = "yes"
 
-streamhandler = logging.StreamHandler()
-streamhandler.setFormatter(ColoredFormatter())
-log.addHandler(streamhandler)
-log.setLevel(logging.INFO)
+console = logging.StreamHandler()
+console.setFormatter(ColoredFormatter())
+log.addHandler(console)
+console.setLevel(log.WARNING)
+logging.getLogger().setLevel(log.DEBUG)
