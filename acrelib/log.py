@@ -5,6 +5,15 @@ from termcolor import colored
 
 log = logging.getLogger()
 
+log.NOTSET = logging.NOTSET
+log.DEBUG = logging.DEBUG
+log.INFO = logging.INFO
+log.HIGHLIGHT = logging.INFO + 3
+log.TRACE = logging.INFO + 5
+log.WARNING = logging.WARNING
+log.ERROR = logging.ERROR
+log.CRITICAL = logging.CRITICAL
+
 
 class ColoredFormatter(logging.Formatter):
 
@@ -13,6 +22,8 @@ class ColoredFormatter(logging.Formatter):
     FORMATS = {
         logging.DEBUG: colored(format, "grey"),
         logging.INFO: colored(format, "white"),
+        log.HIGHLIGHT: colored(format, "cyan"),
+        log.TRACE: colored(format, "magenta"),
         logging.WARNING: colored(format, "yellow"),
         logging.ERROR: colored(format, "red"),
         logging.CRITICAL: colored(format, "red", attrs=['bold'])
@@ -29,18 +40,17 @@ def fatal(*args, **kwargs):
     sys.exit(255)
 
 
-def trace(message, *args, **kwargs):
-    log.info(colored(message, "magenta"), *args, **kwargs)
+def trace(*args, **kwargs):
+    log.log(log.TRACE, *args, **kwargs)
 
 
-log.NOTSET = logging.NOTSET
-log.DEBUG = logging.DEBUG
-log.INFO = logging.INFO
-log.WARNING = logging.WARNING
-log.ERROR = logging.ERROR
-log.CRITICAL = logging.CRITICAL
+def highlight(*args, **kwargs):
+    log.log(log.HIGHLIGHT, *args, **kwargs)
+
+
 log.fatal = fatal
 log.trace = trace
+log.highlight = highlight
 
 os.environ['FORCE_COLOR'] = "yes"
 
