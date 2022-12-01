@@ -3,6 +3,7 @@ import sys
 import logging
 from termcolor import colored
 
+log = logging.getLogger()
 
 class ColoredFormatter(logging.Formatter):
 
@@ -22,37 +23,27 @@ class ColoredFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-class ColoredLogger(logging.Logger):
+def fatal(*args, **kwargs):
+    log.critical(*args, **kwargs)
+    sys.exit(255)
 
-    NOTSET = logging.NOTSET
-    DEBUG = logging.DEBUG
-    INFO = logging.INFO
-    WARNING = logging.WARNING
-    ERROR = logging.ERROR
-    CRITICAL = logging.CRITICAL
 
-    def __init__(self, level=logging.NOTSET):
-        super().__init__(level)
+def trace(message, *args, **kwargs):
+    log.info(colored(message, "magenta"), *args, **kwargs)
 
-        self.streamhandler = logging.StreamHandler()
-        self.streamhandler.setFormatter(ColoredFormatter())
-        self.addHandler(self.streamhandler)
-        self.setLevel(logging.INFO)
 
-    def setLevel(self, level):
-        super().setLevel(level)
-        self.streamhandler.setLevel(level)
-
-    def fatal(self, *args, **kwargs):
-        self.critical(*args, **kwargs)
-        sys.exit(255)
-
-    def trace(self, message):
-        self.info(colored(message, "magenta"))
-
+log.NOTSET = logging.NOTSET
+log.DEBUG = logging.DEBUG
+log.INFO = logging.INFO
+log.WARNING = logging.WARNING
+log.ERROR = logging.ERROR
+log.CRITICAL = logging.CRITICAL
+log.fatal = fatal
+log.trace = trace
 
 os.environ['FORCE_COLOR'] = "yes"
 
-logging.setLoggerClass(ColoredLogger)
-log = logging.getLogger("acre")
-
+streamhandler = logging.StreamHandler()
+streamhandler.setFormatter(ColoredFormatter())
+log.addHandler(streamhandler)
+log.setLevel(logging.INFO)
