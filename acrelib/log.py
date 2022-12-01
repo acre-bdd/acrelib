@@ -53,9 +53,9 @@ def highlight(*args, **kwargs):
     log.log(log.HIGHLIGHT, *args, **kwargs)
 
 
-logging.Logger.fatal = fatal
-logging.Logger.trace = trace
-logging.Logger.highlight = highlight
+log.fatal = fatal
+log.trace = trace
+log.highlight = highlight
 
 os.environ['FORCE_COLOR'] = "yes"
 
