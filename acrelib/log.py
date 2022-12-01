@@ -5,6 +5,7 @@ from termcolor import colored
 
 log = logging.getLogger()
 
+
 class ColoredFormatter(logging.Formatter):
 
     format = "%(message)s"
