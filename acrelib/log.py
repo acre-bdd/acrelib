@@ -53,14 +53,14 @@ def highlight(*args, **kwargs):
     log.log(log.HIGHLIGHT, *args, **kwargs)
 
 
-log.fatal = fatal
-log.trace = trace
-log.highlight = highlight
+logging.Logger.fatal = fatal
+logging.Logger.trace = trace
+logging.Logger.highlight = highlight
 
 os.environ['FORCE_COLOR'] = "yes"
 
-console = logging.StreamHandler()
-console.setFormatter(ColoredFormatter())
-log.addHandler(console)
-console.setLevel(log.WARNING)
+log.console = logging.StreamHandler()
+log.console.setFormatter(ColoredFormatter())
+log.addHandler(log.console)
+log.console.setLevel(log.TRACE)
 logging.getLogger().setLevel(log.DEBUG)
